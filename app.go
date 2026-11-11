@@ -8,6 +8,8 @@ import (
 	"strings"
 	"os"
 	"encoding/base64"
+	goruntime "runtime"
+	"os/exec"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
@@ -101,4 +103,59 @@ func (a *App) ScanFolder(root string) ([]Pattern, error) {
 	})
 
 	return patterns, err
+}
+
+// OpenFile opens a file in the system's default app, only from inside the chosen folder.
+func (a *App) OpenFile(path string) error {
+	p := filepath.Clean(path)
+	rel, err := filepath.Rel(a.root, p)
+	if a.root == "" || err != nil || strings.HasPrefix(rel, "..") {
+		return fmt.Errorf("forbidden")
+	}
+	switch goruntime.GOOS {
+	case "darwin":
+		return exec.Command("open", p).Start()
+	case "windows":
+		return exec.Command("cmd", "/c", "start", "", p).Start()
+	default:
+		return exec.Command("xdg-open", p).Start()
+	}
+}
+
+// SaveCopy asks where to save and writes a copy of the file there.
+func (a *App) SaveCopy(path string) error {
+	p := filepath.Clean(path)
+	rel, err := filepath.Rel(a.root, p)
+	if a.root == "" || err != nil || strings.HasPrefix(rel, "..") {
+		return fmt.Errorf("forbidden")
+	}
+	dest, err := runtime.SaveFileDialog(a.ctx, runtime.SaveDialogOptions{
+		Title:           "Save a copy",
+		DefaultFilename: filepath.Base(p),
+	})
+	if err != nil || dest == "" {
+		return err // empty dest means the user cancelled
+	}
+	data, err := os.ReadFile(p)
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(dest, data, 0644)
+}
+
+// RevealFile shows the file in Finder / Explorer.
+func (a *App) RevealFile(path string) error {
+	p := filepath.Clean(path)
+	rel, err := filepath.Rel(a.root, p)
+	if a.root == "" || err != nil || strings.HasPrefix(rel, "..") {
+		return fmt.Errorf("forbidden")
+	}
+	switch goruntime.GOOS {
+	case "darwin":
+		return exec.Command("open", "-R", p).Start()
+	case "windows":
+		return exec.Command("explorer", "/select,", p).Start()
+	default:
+		return exec.Command("xdg-open", filepath.Dir(p)).Start()
+	}
 }

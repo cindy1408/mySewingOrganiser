@@ -10,8 +10,20 @@ export function Greet(arg1) {
   return window['go']['main']['App']['Greet'](arg1);
 }
 
+export function OpenFile(arg1) {
+  return window['go']['main']['App']['OpenFile'](arg1);
+}
+
 export function ReadFile(arg1) {
   return window['go']['main']['App']['ReadFile'](arg1);
+}
+
+export function RevealFile(arg1) {
+  return window['go']['main']['App']['RevealFile'](arg1);
+}
+
+export function SaveCopy(arg1) {
+  return window['go']['main']['App']['SaveCopy'](arg1);
 }
 
 export function ScanFolder(arg1) {

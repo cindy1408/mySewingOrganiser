@@ -6,6 +6,12 @@ export function ChooseFolder():Promise<string>;
 
 export function Greet(arg1:string):Promise<string>;
 
+export function OpenFile(arg1:string):Promise<void>;
+
 export function ReadFile(arg1:string):Promise<string>;
+
+export function RevealFile(arg1:string):Promise<void>;
+
+export function SaveCopy(arg1:string):Promise<void>;
 
 export function ScanFolder(arg1:string):Promise<Array<main.Pattern>>;
