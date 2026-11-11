@@ -1,5 +1,6 @@
 # mySewingOrganiser
 
+Built with [Wails](https://wails.io) (Go backend, React + TypeScript front end).
 
 ### Prerequisites
 
