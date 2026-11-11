@@ -6,10 +6,6 @@ export function ChooseFolder() {
   return window['go']['main']['App']['ChooseFolder']();
 }
 
-export function Greet(arg1) {
-  return window['go']['main']['App']['Greet'](arg1);
-}
-
 export function OpenFile(arg1) {
   return window['go']['main']['App']['OpenFile'](arg1);
 }

@@ -4,8 +4,6 @@ import {main} from '../models';
 
 export function ChooseFolder():Promise<string>;
 
-export function Greet(arg1:string):Promise<string>;
-
 export function OpenFile(arg1:string):Promise<void>;
 
 export function ReadFile(arg1:string):Promise<string>;
